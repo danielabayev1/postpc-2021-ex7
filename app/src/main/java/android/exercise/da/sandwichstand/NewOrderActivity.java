@@ -24,6 +24,9 @@ public class NewOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_order);
 
+        //get db instance
+        FireBaseManager fbm = OrderApplication.getInstance().getFbm();
+
         // find views
         EditText customerName = findViewById(R.id.customerName);
         Button addPickle = findViewById(R.id.addPickle);
@@ -33,7 +36,6 @@ public class NewOrderActivity extends AppCompatActivity {
         CheckBox tahini = findViewById(R.id.tahiniCheckBox);
         EditText comment = findViewById(R.id.comment);
         Button saveButton = findViewById(R.id.saveButton);
-        SharedPreferences sp  = OrderApplication.getInstance().getCurrentOrder();
 
         addPickle.setOnClickListener(v -> {
             int pickles = Integer.parseInt(pickleCounter.getText().toString());
@@ -61,15 +63,17 @@ public class NewOrderActivity extends AppCompatActivity {
                     int pickles = Integer.parseInt(pickleCounter.getText().toString());
                     String sComment = comment.getText().toString();
                     String status = "waiting";
-                    Order order = new Order(newId, name, pickles, addHummus, addTahini, sComment, status);
-                    fb.collection("orders").document(newId).set(order).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("order_id", newId);
-                            editor.apply();
-                        }
-                    });
+                    Order newOrder = new Order(newId, name, pickles, addHummus, addTahini, sComment, status);
+                    fbm.newOrder(newOrder);
+                    Intent editActivity = new Intent(NewOrderActivity.this, EditOrderActivity.class);
+//                    editActivity.putExtra("id", newId);
+//                    editActivity.putExtra("hummus", addHummus);
+//                    editActivity.putExtra("tahini", addTahini);
+//                    editActivity.putExtra("pickles", pickles);
+//                    editActivity.putExtra("comment", sComment);
+//                    editActivity.putExtra("status", status);
+                    startActivity(editActivity);
+                    finish();
                 }
             }
         });

@@ -88,8 +88,8 @@
 
     <Button
         android:id="@+id/editSaveButton"
-        android:layout_width="130dp"
-        android:layout_height="42dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="save changes"
         app:layout_constraintEnd_toEndOf="parent"

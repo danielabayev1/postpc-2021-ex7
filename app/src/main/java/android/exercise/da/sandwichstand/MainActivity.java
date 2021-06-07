@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,28 +16,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sp = OrderApplication.getInstance().getCurrentOrder();
+        String orderStatus = OrderApplication.getInstance().getFbm().getCurrentOrderStatus();
 
-        String orderId = sp.getString("order_id", null);
-        if (orderId == null) {
+        if (orderStatus == null || orderStatus.equals("done")) {
             Intent newOrder = new Intent(MainActivity.this, NewOrderActivity.class);
             startActivity(newOrder);
             finish();
         } else {
-            FirebaseFirestore fb = FirebaseFirestore.getInstance();
-            fb.collection("orders").document(orderId).get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Order order = documentSnapshot.toObject(Order.class);
-                            orderStatus = order.getStatus();
-                            if (orderStatus.equals("waiting")) {
-                                Intent editOrder = new Intent(MainActivity.this, EditOrderActivity.class);
-                                startActivity(editOrder);
-                            }
-                        }
-                    });
-
+            if (orderStatus.equals("waiting")) {
+                Intent editOrder = new Intent(MainActivity.this, EditOrderActivity.class);
+                startActivity(editOrder);
+                finish();
+            }
+            if (orderStatus.equals("in-progress")) {
+                Intent inTheMaking = new Intent(MainActivity.this, InTheMakingActivity.class);
+                startActivity(inTheMaking);
+                finish();
+            }
+            if (orderStatus.equals("ready")) {
+                Intent ready = new Intent(MainActivity.this, OrderIsReadyActivity.class);
+                startActivity(ready);
+                finish();
+            }
         }
 
         /* todo read from fb one document*/
