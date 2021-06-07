@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "129205425248",
+    "project_id": "postpc-2021-sandwichstand",
+    "storage_bucket": "postpc-2021-sandwichstand.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129205425248:android:c705399ce1a8d77dc0df05",
+        "android_client_info": {
+          "package_name": "android.exercise.da.sandwichstand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129205425248-38vut8492eqnbsv25h2usnglk0chttst.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB59ehHi1_wHuDK6xU6ETgDgShyQdnFyow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129205425248-38vut8492eqnbsv25h2usnglk0chttst.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

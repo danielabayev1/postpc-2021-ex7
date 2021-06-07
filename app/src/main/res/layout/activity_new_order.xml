@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewOrderActivity">
+
+    <TextView
+        android:id="@+id/newOrderTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Welcome to Rachel's sandwich stand\n\n order sandwich:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/customerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="(mandatory)enter your name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newOrderTitle" />
+    <TextView
+        android:id="@+id/pickles"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="10dp"
+        android:gravity="center"
+        android:text="pickels: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customerName" />
+    <TextView
+        android:id="@+id/picklesCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:textSize="10dp"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@id/pickles"
+        app:layout_constraintTop_toBottomOf="@id/customerName" />
+
+    <Button
+        android:id="@+id/addPickle"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="+"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/picklesCounter"
+        app:layout_constraintTop_toBottomOf="@id/customerName" />
+        />
+    <Button
+        android:id="@+id/removePickle"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:text="-"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/addPickle"
+        app:layout_constraintTop_toBottomOf="@id/customerName" />
+    />
+
+    <CheckBox
+        android:id="@+id/hummusCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pickles"
+        android:text="add hummus?" />
+    <CheckBox
+        android:id="@+id/tahiniCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hummusCheckBox"
+        android:text="add tahini?" />
+
+    <EditText
+        android:id="@+id/comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="add comment"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tahiniCheckBox" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="order now"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/comment" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

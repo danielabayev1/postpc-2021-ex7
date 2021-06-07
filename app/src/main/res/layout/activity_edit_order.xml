@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditOrderActivity">
+
+    <TextView
+        android:id="@+id/editOrderTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="your order is waiting\n\n edit order:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editCustomerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editOrderTitle" />
+    <TextView
+        android:id="@+id/editPickles"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="10dp"
+        android:gravity="center"
+        android:text="pickels: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editCustomerName" />
+    <TextView
+        android:id="@+id/editPicklesCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:textSize="10dp"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@id/editPickles"
+        app:layout_constraintTop_toBottomOf="@id/editCustomerName" />
+
+    <Button
+        android:id="@+id/editAddPickle"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="+"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/editPicklesCounter"
+        app:layout_constraintTop_toBottomOf="@id/editCustomerName" />
+    />
+    <Button
+        android:id="@+id/editRemovePickle"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:text="-"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/editAddPickle"
+        app:layout_constraintTop_toBottomOf="@id/editCustomerName" />
+    />
+
+    <CheckBox
+        android:id="@+id/editHummusCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editPickles"
+        android:text="add hummus?" />
+    <CheckBox
+        android:id="@+id/editTahiniCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editHummusCheckBox"
+        android:text="add tahini?" />
+
+    <EditText
+        android:id="@+id/editComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="add comment"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTahiniCheckBox" />
+
+    <Button
+        android:id="@+id/editSaveButton"
+        android:layout_width="130dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="16dp"
+        android:text="save changes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editComment" />
+    <Button
+        android:id="@+id/editCancelButton"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Cancel order"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editSaveButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>
