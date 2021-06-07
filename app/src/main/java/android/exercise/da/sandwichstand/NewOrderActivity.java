@@ -66,12 +66,6 @@ public class NewOrderActivity extends AppCompatActivity {
                     Order newOrder = new Order(newId, name, pickles, addHummus, addTahini, sComment, status);
                     fbm.newOrder(newOrder);
                     Intent editActivity = new Intent(NewOrderActivity.this, EditOrderActivity.class);
-//                    editActivity.putExtra("id", newId);
-//                    editActivity.putExtra("hummus", addHummus);
-//                    editActivity.putExtra("tahini", addTahini);
-//                    editActivity.putExtra("pickles", pickles);
-//                    editActivity.putExtra("comment", sComment);
-//                    editActivity.putExtra("status", status);
                     startActivity(editActivity);
                     finish();
                 }
