@@ -112,7 +112,8 @@ public class EditOrderActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fbm.deleteOrder(myOrder);
+                fbm.deleteOrder();
+                finish();
             }
         });
 

@@ -24,6 +24,7 @@ public class OrderApplication extends Application {
         super.onCreate();
         instance = this;
         this.sp = this.getSharedPreferences("sandwich_db", Context.MODE_PRIVATE);
+        System.out.println("----"+sp.getString("order_id", null));
         this.fbm = new FireBaseManager(this.sp);
     }
 

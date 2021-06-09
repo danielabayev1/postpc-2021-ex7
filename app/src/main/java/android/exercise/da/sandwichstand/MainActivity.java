@@ -18,7 +18,6 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 public class MainActivity extends AppCompatActivity {
     int i;
-    public Order myOrder = null;
     private BroadcastReceiver br = null;
 
     @Override
@@ -27,30 +26,27 @@ public class MainActivity extends AppCompatActivity {
         LiveData<Order> orderLiveData = OrderApplication.getInstance().getFbm().getCurrentOrder();
         orderLiveData.observe(this, order -> {
             //todo handle coming to new order after finishing last order
-            if (OrderApplication.getInstance().getFbm().getLastOrderId().equals("")) {
+            String lastOrder=OrderApplication.getInstance().getFbm().getLastOrderId();
+            if (lastOrder.equals("")) {
                 System.out.println("----new Order from main " + i);
                 i += 1;
                 Intent newOrder = new Intent(MainActivity.this, NewOrderActivity.class);
                 startActivity(newOrder);
-//                finish();
+
             } else if (order != null) {
-                myOrder = order;
                 String orderStatus = order.getStatus();
                 if ("waiting".equals(orderStatus)) {
                     System.out.println("----waiting from Main");
                     Intent editOrder = new Intent(MainActivity.this, EditOrderActivity.class);
                     startActivity(editOrder);
-//                    finish();
                 } else if ("in-progress".equals(orderStatus)) {
                     System.out.println("----In progress from main");
                     Intent inTheMaking = new Intent(MainActivity.this, InTheMakingActivity.class);
                     startActivity(inTheMaking);
-//                    finish();
                 } else if ("ready".equals(orderStatus)) {
                     System.out.println("----ready from Main");
                     Intent ready = new Intent(MainActivity.this, OrderIsReadyActivity.class);
                     startActivity(ready);
-//                    finish();
                 }
             }
         });
@@ -59,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent incomingIntent) {
                 if (incomingIntent == null || !incomingIntent.getAction().equals("backspace_pressed")) {
                     return;
-                }
-
-                else{
+                } else {
                     finish();
                 }
 
@@ -78,14 +72,3 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-/* todo read from fb one document*/
-//        FirebaseFirestore fb = FirebaseFirestore.getInstance();
-//        fb.collection("orders").document("81HwjDmVwZRrJre8ZlIz").get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                Order order = documentSnapshot.toObject(Order.class);
-//                order.stringMe();
-//                text.setText(order.id);
-//            }
-//        });

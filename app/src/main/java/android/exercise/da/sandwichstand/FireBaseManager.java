@@ -19,10 +19,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 public class FireBaseManager {
     private final SharedPreferences sp;
     private final FirebaseFirestore fb;
-    private Order currentOrder = null;
     private String orderId = "";
     MutableLiveData<Order> liveData;
-    private String status = null;
     private ListenerRegistration listener = null;
 
     public FireBaseManager(SharedPreferences sp) {
@@ -47,18 +45,14 @@ public class FireBaseManager {
                             } else if (!value.exists()) {
                                 System.out.println("----val not exist");
                                 //todo open newOrder
+                                cleanLastOrder();
                             } else {
                                 Order order = value.toObject(Order.class);
                                 System.out.println("---- from ld, status:" + order.getStatus());
                                 if (order.getStatus().equals("done")) {
-                                    orderId = "";
-                                    SharedPreferences.Editor editor = sp.edit();
-                                    editor.putString("order_id", orderId);
-                                    editor.apply();
-                                    liveData.postValue(null);
+                                    cleanLastOrder();
                                 } else {
-                                        liveData.postValue(order);
-
+                                    liveData.setValue(order);
                                 }
                             }
                         }
@@ -68,8 +62,19 @@ public class FireBaseManager {
 
     private void initFromSp() {
         this.orderId = sp.getString("order_id", null);
+        if (orderId == null) {
+            orderId = "";
+        }
         setListener();
 
+    }
+
+    private void cleanLastOrder() {
+        orderId = "";
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("order_id", orderId);
+        editor.apply();
+        liveData.setValue(null);
     }
 
     public void newOrder(Order order) {
@@ -80,7 +85,6 @@ public class FireBaseManager {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("order_id", order.getId());
                 editor.apply();
-//                liveData.postValue(order);
                 setListener();
             }
         });
@@ -88,17 +92,15 @@ public class FireBaseManager {
 
     public void updateOrder(Order order) {
         fb.collection("orders").document(order.getId()).set(order);
-//        liveData.postValue(order);
     }
 
-    public void deleteOrder(Order order) {
+    public void deleteOrder() {
+        fb.collection("orders").document(orderId).delete();
 
     }
 
-    public void markOrderDone(){
-        fb.collection("orders").document(orderId).update("status","done");
-        orderId="";
-
+    public void markOrderDone() {
+        fb.collection("orders").document(orderId).update("status", "done");
     }
 
     public String getLastOrderId() {
@@ -109,21 +111,6 @@ public class FireBaseManager {
         return liveData;
     }
 
-    public LiveData<Order> getCurrentOrderLiveData() {
-        String orderId = sp.getString("order_id", null);
-        if (orderId != null) {
-            this.fb.collection("orders").document(orderId).get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            currentOrder = documentSnapshot.toObject(Order.class);
-                            status = currentOrder.getStatus();
-                            liveData.setValue(currentOrder);
-                        }
-                    });
-        }
-        return liveData;
-    }
 }
 
 
