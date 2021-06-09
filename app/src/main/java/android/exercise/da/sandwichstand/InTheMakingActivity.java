@@ -1,5 +1,6 @@
 package android.exercise.da.sandwichstand;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -15,11 +16,17 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
 public class InTheMakingActivity extends AppCompatActivity {
-    ListenerRegistration listener = null;
+    int counter = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_the_making);
+
+        if (savedInstanceState != null) {
+            this.counter = savedInstanceState.getInt("counter");
+        }
+
         FireBaseManager fbm = OrderApplication.getInstance().getFbm();
         LiveData<Order> currentOrder = fbm.getCurrentOrder();
         currentOrder.observe(this, new Observer<Order>() {
@@ -27,20 +34,27 @@ public class InTheMakingActivity extends AppCompatActivity {
             public void onChanged(Order order) {
                 if (order != null) {
                     String orderStatus = order.getStatus();
-                    if (orderStatus == null || orderStatus.equals("done")) {
-                        Intent newOrder = new Intent(InTheMakingActivity.this, NewOrderActivity.class);
-                        startActivity(newOrder);
+                    if (!orderStatus.equals("in-progress") && counter == 0) {
+                        counter += 1;
+                        System.out.println("----call main from in-progress");
+//                        Intent newOrder = new Intent(InTheMakingActivity.this, MainActivity.class);
+//                        startActivity(newOrder);
                         finish();
-                    } else {
-                        if (orderStatus.equals("ready")) {
-                            System.out.println("from start");
-                            Intent ready = new Intent(InTheMakingActivity.this, OrderIsReadyActivity.class);
-                            startActivity(ready);
-                            finish();
-                        }
                     }
                 }
             }
         });
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        savedInstanceState.putInt("counter", this.counter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sendBroadcast(new Intent("backspace_pressed"));
     }
 }

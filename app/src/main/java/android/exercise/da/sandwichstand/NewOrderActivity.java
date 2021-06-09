@@ -56,7 +56,6 @@ public class NewOrderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = customerName.getText().toString();
                 if (!name.equals("")) {
-                    FirebaseFirestore fb = FirebaseFirestore.getInstance();
                     String newId = UUID.randomUUID().toString();
                     boolean addHummus = hummus.isChecked();
                     boolean addTahini = tahini.isChecked();
@@ -65,13 +64,19 @@ public class NewOrderActivity extends AppCompatActivity {
                     String status = "waiting";
                     Order newOrder = new Order(newId, name, pickles, addHummus, addTahini, sComment, status);
                     fbm.newOrder(newOrder);
-                    Intent editActivity = new Intent(NewOrderActivity.this, EditOrderActivity.class);
-                    startActivity(editActivity);
+//                    Intent editActivity = new Intent(NewOrderActivity.this, MainActivity.class);
+//                    startActivity(editActivity);
                     finish();
                 }
             }
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sendBroadcast(new Intent("backspace_pressed"));
     }
 }

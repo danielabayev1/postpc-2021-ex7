@@ -15,11 +15,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
+/*todo understand the flow of new order, new order after done and adjust the livedata accordingly*/
 public class FireBaseManager {
-    private SharedPreferences sp;
-    private FirebaseFirestore fb;
+    private final SharedPreferences sp;
+    private final FirebaseFirestore fb;
     private Order currentOrder = null;
-    private String orderId=null;
+    private String orderId = "";
     MutableLiveData<Order> liveData;
     private String status = null;
     private ListenerRegistration listener = null;
@@ -32,54 +33,79 @@ public class FireBaseManager {
         initFromSp();
     }
 
+    private void setListener() {
+        if (orderId != null && !orderId.equals("")) {
+            this.listener = fb.collection("orders").document(this.orderId)
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if (error != null) {
+                                System.out.println("----error in listener");
+                            } else if (value == null) {
+                                System.out.println("----val==null");
+                                //don't know yet
+                            } else if (!value.exists()) {
+                                System.out.println("----val not exist");
+                                //todo open newOrder
+                            } else {
+                                Order order = value.toObject(Order.class);
+                                System.out.println("---- from ld, status:" + order.getStatus());
+                                if (order.getStatus().equals("done")) {
+                                    orderId = "";
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.putString("order_id", orderId);
+                                    editor.apply();
+                                    liveData.postValue(null);
+                                } else {
+                                        liveData.postValue(order);
+
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
     private void initFromSp() {
-         this.orderId = sp.getString("order_id", null);
-         this.listener = fb.collection("orders").document(this.orderId)
-                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-             @Override
-             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                 if (error != null) {
-                     System.out.println("error in listener");
-                 } else if (value == null) {
-                     System.out.println("val==null");
-                     //don't know yet
-                 } else if (!value.exists()) {
-                     System.out.println("val not exist");
-                     //todo open newOrder
-                 } else {
-                     Order order = value.toObject(Order.class);
-                     liveData.setValue(order);
-                     }
-             }
-         });
+        this.orderId = sp.getString("order_id", null);
+        setListener();
+
     }
 
     public void newOrder(Order order) {
+        orderId = order.getId();
         fb.collection("orders").document(order.getId()).set(order).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("order_id", order.getId());
                 editor.apply();
+//                liveData.postValue(order);
+                setListener();
             }
         });
-        liveData.setValue(order);
     }
 
-    public void updateOrder(Order order){
+    public void updateOrder(Order order) {
         fb.collection("orders").document(order.getId()).set(order);
-        liveData.setValue(order);
+//        liveData.postValue(order);
     }
 
-    public void deleteOrder(Order order){
+    public void deleteOrder(Order order) {
 
     }
 
-    public String getCurrentOrderStatus() {
-        return status;
+    public void markOrderDone(){
+        fb.collection("orders").document(orderId).update("status","done");
+        orderId="";
+
     }
 
-    public LiveData<Order> getCurrentOrder(){
+    public String getLastOrderId() {
+        return orderId;
+    }
+
+    public LiveData<Order> getCurrentOrder() {
         return liveData;
     }
 
@@ -98,10 +124,6 @@ public class FireBaseManager {
         }
         return liveData;
     }
-    public DocumentReference getOrderRef(){
-        return fb.collection("orders").document("6444da5e-b2cf-4876-9cb9-9e1c2c68b122");
-    }
-
 }
 
 

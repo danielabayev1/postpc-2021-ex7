@@ -1,5 +1,6 @@
 package android.exercise.da.sandwichstand;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -18,13 +19,17 @@ import java.util.UUID;
 
 public class EditOrderActivity extends AppCompatActivity {
     Order myOrder;
+    int counter = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_order);
+        if (savedInstanceState != null) {
+            this.counter = savedInstanceState.getInt("counter");
+        }
 
-        FireBaseManager fbm = OrderApplication.getInstance().getFbm();
-        LiveData<Order> currentOrder = fbm.getCurrentOrder();
+
         //find views
         EditText customerName = findViewById(R.id.editCustomerName);
         Button addPickle = findViewById(R.id.editAddPickle);
@@ -35,6 +40,9 @@ public class EditOrderActivity extends AppCompatActivity {
         EditText comment = findViewById(R.id.editComment);
         Button cancelButton = findViewById(R.id.editCancelButton);
         Button saveButton = findViewById(R.id.editSaveButton);
+
+        FireBaseManager fbm = OrderApplication.getInstance().getFbm();
+        LiveData<Order> currentOrder = fbm.getCurrentOrder();
 
         currentOrder.observe(this, new Observer<Order>() {
             @Override
@@ -49,22 +57,25 @@ public class EditOrderActivity extends AppCompatActivity {
                     myOrder = order;
 
                     String orderStatus = order.getStatus();
-                    if (orderStatus == null || orderStatus.equals("done")) {
-                        Intent newOrder = new Intent(EditOrderActivity.this, NewOrderActivity.class);
-                        startActivity(newOrder);
+
+                    if (!orderStatus.equals("waiting") && counter == 0) {
+                        counter += 1;
+                        System.out.println("----call main from EditActivity status:" + orderStatus+counter);
+//                        Intent newOrder = new Intent(EditOrderActivity.this, MainActivity.class);
+//                        startActivity(newOrder);
                         finish();
-                    } else {
-                        if (orderStatus.equals("in-progress")) {
-                            Intent inTheMaking = new Intent(EditOrderActivity.this, InTheMakingActivity.class);
-                            startActivity(inTheMaking);
-                            finish();
-                        }
-                        if (orderStatus.equals("ready")) {
-                            System.out.println("from start");
-                            Intent ready = new Intent(EditOrderActivity.this, OrderIsReadyActivity.class);
-                            startActivity(ready);
-                            finish();
-                        }
+//                    } else {
+//                        if (orderStatus.equals("in-progress")) {
+//                            Intent inTheMaking = new Intent(EditOrderActivity.this, InTheMakingActivity.class);
+//                            startActivity(inTheMaking);
+//                            finish();
+//                        }
+//                        if (orderStatus.equals("ready")) {
+//                            System.out.println("from start");
+//                            Intent ready = new Intent(EditOrderActivity.this, OrderIsReadyActivity.class);
+//                            startActivity(ready);
+//                            finish();
+//                        }
                     }
                 }
             }
@@ -107,4 +118,15 @@ public class EditOrderActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        savedInstanceState.putInt("counter", this.counter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sendBroadcast(new Intent("backspace_pressed"));
+    }
 }

@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -14,55 +17,64 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
 public class MainActivity extends AppCompatActivity {
-    public String orderStatus;
+    int i;
     public Order myOrder = null;
+    private BroadcastReceiver br = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LiveData<Order> orderLiveData = OrderApplication.getInstance().getFbm().getCurrentOrderLiveData();
-        orderLiveData.observe(this, new Observer<Order>() {
-            @Override
-            public void onChanged(Order order) {
-                if (order != null) {
-                    myOrder = order;
-                    String orderStatus = order.getStatus();
-                    if (orderStatus == null || orderStatus.equals("done")) {
-                        Intent newOrder = new Intent(MainActivity.this, NewOrderActivity.class);
-                        startActivity(newOrder);
-                        finish();
-                    } else {
-                        if (orderStatus.equals("waiting")) {
-                            Intent editOrder = new Intent(MainActivity.this, EditOrderActivity.class);
-                            startActivity(editOrder);
-                            finish();
-                        }
-                        if (orderStatus.equals("in-progress")) {
-                            Intent inTheMaking = new Intent(MainActivity.this, InTheMakingActivity.class);
-                            startActivity(inTheMaking);
-                            finish();
-                        }
-                        if (orderStatus.equals("ready")) {
-                            System.out.println("from start");
-                            Intent ready = new Intent(MainActivity.this, OrderIsReadyActivity.class);
-                            startActivity(ready);
-                            finish();
-                        }
-                    }
-
-
-                } else {
-                    System.out.println("noooooooMain");
+        LiveData<Order> orderLiveData = OrderApplication.getInstance().getFbm().getCurrentOrder();
+        orderLiveData.observe(this, order -> {
+            //todo handle coming to new order after finishing last order
+            if (OrderApplication.getInstance().getFbm().getLastOrderId().equals("")) {
+                System.out.println("----new Order from main " + i);
+                i += 1;
+                Intent newOrder = new Intent(MainActivity.this, NewOrderActivity.class);
+                startActivity(newOrder);
+//                finish();
+            } else if (order != null) {
+                myOrder = order;
+                String orderStatus = order.getStatus();
+                if ("waiting".equals(orderStatus)) {
+                    System.out.println("----waiting from Main");
+                    Intent editOrder = new Intent(MainActivity.this, EditOrderActivity.class);
+                    startActivity(editOrder);
+//                    finish();
+                } else if ("in-progress".equals(orderStatus)) {
+                    System.out.println("----In progress from main");
+                    Intent inTheMaking = new Intent(MainActivity.this, InTheMakingActivity.class);
+                    startActivity(inTheMaking);
+//                    finish();
+                } else if ("ready".equals(orderStatus)) {
+                    System.out.println("----ready from Main");
+                    Intent ready = new Intent(MainActivity.this, OrderIsReadyActivity.class);
+                    startActivity(ready);
+//                    finish();
                 }
             }
-
         });
+        br = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent incomingIntent) {
+                if (incomingIntent == null || !incomingIntent.getAction().equals("backspace_pressed")) {
+                    return;
+                }
 
+                else{
+                    finish();
+                }
+
+            }
+        };
+        registerReceiver(br, new IntentFilter("backspace_pressed"));
     }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.unregisterReceiver(br);
     }
 }
 
