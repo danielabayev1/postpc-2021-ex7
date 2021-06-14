@@ -41,7 +41,7 @@ public class OrderIsReadyActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         sendBroadcast(new Intent("backspace_pressed"));
+        super.onBackPressed();
     }
 }

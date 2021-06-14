@@ -54,7 +54,7 @@ public class EditOrderActivity extends AppCompatActivity {
                     String orderStatus = order.getStatus();
 
                     if (!orderStatus.equals("waiting")) {
-                        System.out.println("----call main from EditActivity status:" + orderStatus);
+//                        System.out.println("----call main from EditActivity status:" + orderStatus);
                         finish();
 
                     }
@@ -102,7 +102,8 @@ public class EditOrderActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         sendBroadcast(new Intent("backspace_pressed"));
+        super.onBackPressed();
+
     }
 }

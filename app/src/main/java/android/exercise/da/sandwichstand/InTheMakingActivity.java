@@ -41,7 +41,8 @@ public class InTheMakingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         sendBroadcast(new Intent("backspace_pressed"));
+        super.onBackPressed();
+
     }
 }

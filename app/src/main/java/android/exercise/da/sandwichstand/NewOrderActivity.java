@@ -24,6 +24,8 @@ public class NewOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_order);
 
+//        System.out.println("----from new order");
+
         //get db instance
         FireBaseManager fbm = OrderApplication.getInstance().getFbm();
 
@@ -78,7 +80,8 @@ public class NewOrderActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         sendBroadcast(new Intent("backspace_pressed"));
+        super.onBackPressed();
+
     }
 }
