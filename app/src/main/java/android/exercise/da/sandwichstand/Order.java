@@ -10,17 +10,17 @@ public class Order {
     private String status;
 
     public Order() {
-
     }
 
-    public Order(String id, String cn, int pic, boolean h, boolean t, String co,String status) {
+    public Order(String id, String costumerName, int pickles, boolean hummus,
+                 boolean tahini, String comment, String status) {
         this.id = id;
-        this.customerName = cn;
-        this.pickles = pic;
-        this.hummus = h;
-        this.tahini = t;
-        this.comment = co;
-        this.status=status;
+        this.customerName = costumerName;
+        this.pickles = pickles;
+        this.hummus = hummus;
+        this.tahini = tahini;
+        this.comment = comment;
+        this.status = status;
     }
 
     public String getId() {
@@ -73,10 +73,5 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void stringMe() {
-        if (id != null && customerName != null)
-            System.out.println(id + "," + customerName + ",");
     }
 }

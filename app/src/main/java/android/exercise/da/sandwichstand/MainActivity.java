@@ -24,11 +24,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.fb = OrderApplication.getInstance().getFbm();
+        if (this.fb == null) {
+            this.fb = OrderApplication.getInstance().getFbm();
+        }
         LiveData<Order> orderLiveData = fb.getCurrentOrder();
         orderLiveData.observe(this, order -> {
             //todo handle coming to new order after finishing last order
-            String lastOrder=OrderApplication.getInstance().getFbm().getLastOrderId();
+//            String lastOrder = OrderApplication.getInstance().getFbm().getLastOrderId();
+            String lastOrder = this.fb.getLastOrderId();
             if (lastOrder.equals("")) {
                 System.out.println("----new Order from main " + i);
                 i += 1;
