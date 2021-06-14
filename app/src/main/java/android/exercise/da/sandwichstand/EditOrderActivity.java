@@ -31,7 +31,7 @@ public class EditOrderActivity extends AppCompatActivity {
 
 
         //find views
-        EditText customerName = findViewById(R.id.editCustomerName);
+        TextView customerName = findViewById(R.id.editCustomerName);
         Button addPickle = findViewById(R.id.editAddPickle);
         Button removePickle = findViewById(R.id.editRemovePickle);
         TextView pickleCounter = findViewById(R.id.editPicklesCounter);
@@ -58,24 +58,11 @@ public class EditOrderActivity extends AppCompatActivity {
 
                     String orderStatus = order.getStatus();
 
-                    if (!orderStatus.equals("waiting") && counter == 0) {
+                    if (!orderStatus.equals("waiting")) {
                         counter += 1;
                         System.out.println("----call main from EditActivity status:" + orderStatus+counter);
-//                        Intent newOrder = new Intent(EditOrderActivity.this, MainActivity.class);
-//                        startActivity(newOrder);
                         finish();
-//                    } else {
-//                        if (orderStatus.equals("in-progress")) {
-//                            Intent inTheMaking = new Intent(EditOrderActivity.this, InTheMakingActivity.class);
-//                            startActivity(inTheMaking);
-//                            finish();
-//                        }
-//                        if (orderStatus.equals("ready")) {
-//                            System.out.println("from start");
-//                            Intent ready = new Intent(EditOrderActivity.this, OrderIsReadyActivity.class);
-//                            startActivity(ready);
-//                            finish();
-//                        }
+
                     }
                 }
             }

@@ -19,11 +19,13 @@ import com.google.firebase.firestore.ListenerRegistration;
 public class MainActivity extends AppCompatActivity {
     int i;
     private BroadcastReceiver br = null;
+    public FireBaseManager fb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LiveData<Order> orderLiveData = OrderApplication.getInstance().getFbm().getCurrentOrder();
+        this.fb = OrderApplication.getInstance().getFbm();
+        LiveData<Order> orderLiveData = fb.getCurrentOrder();
         orderLiveData.observe(this, order -> {
             //todo handle coming to new order after finishing last order
             String lastOrder=OrderApplication.getInstance().getFbm().getLastOrderId();
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 if (incomingIntent == null || !incomingIntent.getAction().equals("backspace_pressed")) {
                     return;
                 } else {
+//                    System.out.println("----back");
                     finish();
                 }
 

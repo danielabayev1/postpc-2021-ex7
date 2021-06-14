@@ -34,11 +34,9 @@ public class InTheMakingActivity extends AppCompatActivity {
             public void onChanged(Order order) {
                 if (order != null) {
                     String orderStatus = order.getStatus();
-                    if (!orderStatus.equals("in-progress") && counter == 0) {
+                    if (!orderStatus.equals("in-progress")) {
                         counter += 1;
                         System.out.println("----call main from in-progress");
-//                        Intent newOrder = new Intent(InTheMakingActivity.this, MainActivity.class);
-//                        startActivity(newOrder);
                         finish();
                     }
                 }
