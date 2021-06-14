@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 //            String lastOrder = OrderApplication.getInstance().getFbm().getLastOrderId();
             String lastOrder = this.fb.getLastOrderId();
             if (lastOrder.equals("")) {
-                System.out.println("----new Order from main " + i);
+//                System.out.println("----new Order from main " + i);
                 i += 1;
                 Intent newOrder = new Intent(MainActivity.this, NewOrderActivity.class);
                 startActivity(newOrder);
@@ -41,15 +41,15 @@ public class MainActivity extends AppCompatActivity {
             } else if (order != null) {
                 String orderStatus = order.getStatus();
                 if ("waiting".equals(orderStatus)) {
-                    System.out.println("----waiting from Main");
+//                    System.out.println("----waiting from Main");
                     Intent editOrder = new Intent(MainActivity.this, EditOrderActivity.class);
                     startActivity(editOrder);
                 } else if ("in-progress".equals(orderStatus)) {
-                    System.out.println("----In progress from main");
+//                    System.out.println("----In progress from main");
                     Intent inTheMaking = new Intent(MainActivity.this, InTheMakingActivity.class);
                     startActivity(inTheMaking);
                 } else if ("ready".equals(orderStatus)) {
-                    System.out.println("----ready from Main");
+//                    System.out.println("----ready from Main");
                     Intent ready = new Intent(MainActivity.this, OrderIsReadyActivity.class);
                     startActivity(ready);
                 }

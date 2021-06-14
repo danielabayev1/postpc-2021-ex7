@@ -20,6 +20,7 @@ public class FireBaseManager {
     private final SharedPreferences sp;
     private final FirebaseFirestore fb;
     private String orderId = "";
+    private String lastCustomerName = "";
     MutableLiveData<Order> liveData;
     private ListenerRegistration listener = null;
 
@@ -38,17 +39,17 @@ public class FireBaseManager {
                         @Override
                         public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                             if (error != null) {
-                                System.out.println("----error in listener");
+//                                System.out.println("----error in listener");
                             } else if (value == null) {
-                                System.out.println("----val==null");
+//                                System.out.println("----val==null");
                                 //don't know yet
                             } else if (!value.exists()) {
-                                System.out.println("----val not exist");
+//                                System.out.println("----val not exist");
                                 //todo open newOrder
                                 cleanLastOrder();
                             } else {
                                 Order order = value.toObject(Order.class);
-                                System.out.println("---- from ld, status:" + order.getStatus());
+//                                System.out.println("---- from ld, status:" + order.getStatus());
                                 if (order.getStatus().equals("done")) {
                                     cleanLastOrder();
                                 } else {
@@ -62,8 +63,12 @@ public class FireBaseManager {
 
     private void initFromSp() {
         this.orderId = sp.getString("order_id", null);
+        this.lastCustomerName = sp.getString("customer_name", null);
         if (orderId == null) {
             orderId = "";
+        }
+        if (lastCustomerName == null) {
+            this.lastCustomerName = "";
         }
         setListener();
 
@@ -79,11 +84,13 @@ public class FireBaseManager {
 
     public void newOrder(Order order) {
         orderId = order.getId();
+        lastCustomerName = order.getCustomerName();
         fb.collection("orders").document(order.getId()).set(order).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("order_id", order.getId());
+                editor.putString("customer_name", order.getCustomerName());
                 editor.apply();
                 setListener();
             }
@@ -109,6 +116,10 @@ public class FireBaseManager {
 
     public LiveData<Order> getCurrentOrder() {
         return liveData;
+    }
+
+    public String getLastCustomerName() {
+        return lastCustomerName;
     }
 
 }

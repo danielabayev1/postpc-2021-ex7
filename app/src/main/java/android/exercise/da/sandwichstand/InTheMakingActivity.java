@@ -16,16 +16,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
 public class InTheMakingActivity extends AppCompatActivity {
-    int counter = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_the_making);
-
-        if (savedInstanceState != null) {
-            this.counter = savedInstanceState.getInt("counter");
-        }
 
         FireBaseManager fbm = OrderApplication.getInstance().getFbm();
         LiveData<Order> currentOrder = fbm.getCurrentOrder();
@@ -35,19 +31,12 @@ public class InTheMakingActivity extends AppCompatActivity {
                 if (order != null) {
                     String orderStatus = order.getStatus();
                     if (!orderStatus.equals("in-progress")) {
-                        counter += 1;
-                        System.out.println("----call main from in-progress");
+//                        System.out.println("----call main from in-progress");
                         finish();
                     }
                 }
             }
         });
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        savedInstanceState.putInt("counter", this.counter);
     }
 
     @Override

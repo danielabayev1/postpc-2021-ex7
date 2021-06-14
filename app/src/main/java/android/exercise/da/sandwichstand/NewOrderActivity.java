@@ -37,6 +37,8 @@ public class NewOrderActivity extends AppCompatActivity {
         EditText comment = findViewById(R.id.comment);
         Button saveButton = findViewById(R.id.saveButton);
 
+        customerName.setText(fbm.getLastCustomerName());
+
         addPickle.setOnClickListener(v -> {
             int pickles = Integer.parseInt(pickleCounter.getText().toString());
             if (pickles < 10) {
