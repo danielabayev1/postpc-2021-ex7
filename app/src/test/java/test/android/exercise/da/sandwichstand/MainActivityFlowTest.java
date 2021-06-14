@@ -28,7 +28,7 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {28}, application = Application.class)
-public class MainActivityTest {
+public class MainActivityFlowTest {
 
     private ActivityController<MainActivity> activityController;
     private MainActivity activityUnderTest;
